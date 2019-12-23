@@ -1,7 +1,7 @@
 import SwaggerApiTrackingWebpackPlugin from '../src/index';
 import webpack from 'webpack';
 import path from 'path';
-import { Config } from '../src/config';
+import {Config} from '../src/config';
 
 const getFullPath = (p: string) => path.resolve(__dirname, p);
 

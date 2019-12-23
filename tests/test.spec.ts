@@ -1,9 +1,5 @@
 import webpack from 'webpack';
-import WebpackBuildNotifierPlugin from '../src/index';
 import getWebpackConfig from './webpack.config';
-import child_process from 'child_process';
-import os from 'os';
-import { Config } from '../src/config';
 import {TestApiLoader} from "./api-loader";
 
 // TODO: test for registerSnoreToast

@@ -1,7 +1,6 @@
 import os from 'os'
 import LowdbFileSync from 'lowdb/adapters/FileSync'
 import Lowdb from "lowdb"
-import {Config} from "./config";
 import {Schema} from "inspector";
 
 const homedir = os.homedir();
@@ -16,12 +15,12 @@ export interface Repository {
 
 export class LowdbRepository implements Repository {
 
-  private db:Lowdb.LowdbSync<Schema>
+  private db: Lowdb.LowdbSync<Schema>
 
   constructor() {
     const adapter = new LowdbFileSync<Schema>(`${homedir}/.swagger-api-tracking-webpack-plugin.json`)
     this.db = Lowdb(adapter)
-    const write: Schema = this.db.defaults({ nextFireTime: -1 }).write();
+    const write: Schema = this.db.defaults({nextFireTime: -1}).write();
   }
 
   getNextFireTime(): number {
