@@ -1,0 +1,38 @@
+{
+  "name": "swagger-api-tracking-webpack-plugin",
+  "version": "0.0.1-beta.1",
+  "description": "it's webpack plugin for tracking swagger api changes",
+  "engines": {
+    "node": ">=8.6.0"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rimraf dist tests/assets",
+    "test": "jest"
+  },
+  "keywords": [
+    "swagger",
+    "api",
+    "diff"
+  ],
+  "author": "고재훈 <kkojaeh@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^24.0.24",
+    "@types/node": "^12.12.21",
+    "@types/node-fetch": "^2.5.4",
+    "@types/webpack": "^4.41.0",
+    "jest": "^24.9.0",
+    "rimraf": "^3.0.0",
+    "ts-jest": "^24.2.0",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.4"
+  },
+  "dependencies": {
+    "@types/lowdb": "^1.0.9",
+    "lowdb": "^1.0.0",
+    "node-fetch": "^2.6.0"
+  }
+}

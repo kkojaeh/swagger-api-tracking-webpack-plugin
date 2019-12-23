@@ -1,0 +1,15 @@
+.gitignore
+.gitattributes
+.github
+.huskyrc
+.travis.yml
+appveyor.yml
+ci-post-checkout
+preprocessor.js
+scripts
+src
+tsconfig.json
+typings
+docs-util.js
+*.iml
+converage
