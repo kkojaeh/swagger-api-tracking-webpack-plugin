@@ -1,13 +1,13 @@
-import {Swagger2ApiComparer} from "../src/api-comparer";
+import {Swagger2ApiResolver} from "../src/api-resolver";
 import v1Api from './swagger-api/swagger2-v1.json'
 import v1IgnoredDiffApi from './swagger-api/swagger2-v1-ignored-diff.json'
 import invalidApi from './swagger-api/swagger2-invalid.json'
 import v2Api from './swagger-api/swagger2-v2.json'
 // TODO: test for registerSnoreToast
 
-describe('api comparer', () => {
+describe('api resolver', () => {
 
-  const comparer = new Swagger2ApiComparer()
+  const comparer = new Swagger2ApiResolver()
   it('swagger 버전을 확인해야 함', () => {
     expect(() => comparer.equals(v1Api, invalidApi)).toThrow("not swagger format")
   })

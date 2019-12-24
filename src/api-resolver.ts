@@ -1,26 +1,30 @@
 // @ts-ignore
 import swaggerDiff from 'swagger-diff'
-import {ApiDiff, ApiDiffLevel} from "./api";
+import {Api, ApiDiff, ApiDiffLevel} from "./api";
 
-export interface ApiComparer {
-  equals(a: object, b: object): boolean;
+export interface ApiResolver {
 
-  diff(a: object, b: object): Promise<Array<ApiDiff>>;
+  resolve(api: any): Api
+
+  equals(a: any, b: any): boolean
+
+  diff(a: any, b: any): Promise<Array<ApiDiff>>
 }
 
-export type Swagger2Diff = {
-  errors: Array<any>,
-  warnings: Array<any>,
-  infos: Array<any>,
-  unmatchDiffs: Array<any>
-}
-
-
-export class Swagger2ApiComparer implements ApiComparer {
+export class Swagger2ApiResolver implements ApiResolver {
 
   private ignoreProperties: Array<String> = ["swagger", "info", "host", "basePath", "tags"]
 
-  async diff(oa: object, ob: object): Promise<Array<ApiDiff>> {
+  resolve(api: any): Api {
+    return {
+      name: "",
+      title: api.info.title,
+      version: api.info.version,
+      createdAt: new Date()
+    }
+  }
+
+  async diff(oa: any, ob: any): Promise<Array<ApiDiff>> {
     this.validate(oa)
     this.validate(ob)
     const diff = await swaggerDiff(oa, ob, {});
@@ -33,7 +37,7 @@ export class Swagger2ApiComparer implements ApiComparer {
     return results;
   }
 
-  equals(oa: object, ob: object): boolean {
+  equals(oa: any, ob: any): boolean {
     this.validate(oa)
     this.validate(ob)
     const a = JSON.parse(JSON.stringify(oa))

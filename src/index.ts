@@ -5,22 +5,26 @@ import {LowdbRepository, Repository} from "./repository";
 import express from 'express'
 import net from 'net'
 import open from 'open'
+import {ApiResolver, Swagger2ApiResolver} from "./api-resolver";
+import {Api} from "./api";
 
 export default class SwaggerApiTrackingWebpackPlugin {
   private readonly apis: Array<ApiConfig>
-  private readonly apiLoader: ApiLoader
+  private readonly loader: ApiLoader
   private readonly intervalSeconds: number
   private readonly repository: Repository
   private readonly server: net.Server
+  private readonly resolver: ApiResolver
 
   constructor(cfg?: Config) {
     Object.assign(this, cfg);
-    if (!this.apiLoader) {
-      this.apiLoader = new HttpApiLoader()
+    if (!this.loader) {
+      this.loader = new HttpApiLoader()
     }
     if (isNaN(this.intervalSeconds)) {
       this.intervalSeconds = 3600
     }
+    this.resolver = new Swagger2ApiResolver()
     this.repository = new LowdbRepository()
     this.server = this.setupServer()
   }
@@ -47,26 +51,49 @@ export default class SwaggerApiTrackingWebpackPlugin {
     setTimeout(this.tracking.bind(this), nextFireTime - now)
   }
 
+  protected async notify(api: Api): Promise<void> {
+    //await this.open()
+  }
+
   private firstTracking(): void {
     let nextFireTime = this.repository.getNextFireTime()
     const now = Date.now()
     if (nextFireTime < now) {
-      this.tracking().then(() => {
-      })
+      this.tracking().then()
     } else {
       setTimeout(this.tracking.bind(this), nextFireTime - now)
     }
   }
 
   private async tracking(): Promise<void> {
-    for (const api of this.apis) {
+    for (const info of this.apis) {
+      const name = info.name
+      const url = info.url
       try {
-        const apiContent = await this.apiLoader.load(api.url)
+        const content = await this.loader.load(url)
+        const api = this.resolver.resolve(content)
+        api.name = name
+        const latestApi = this.repository.getLatest(name)
+        let different = false
+        if (latestApi) {
+          const latestContent = this.repository.getContent(latestApi.id!)
+          const equals = this.resolver.equals(content, latestContent)
+          if (equals) {
+            continue
+          } else {
+            different = true
+          }
+        }
+        this.repository.add(api)
+        this.repository.setContent(api.id!, content)
+        if (different) {
+          await this.notify(api)
+        }
       } catch (e) {
         console.error(e)
+        continue
       }
     }
-    //await this.open()
     this.nextTracking()
   }
 

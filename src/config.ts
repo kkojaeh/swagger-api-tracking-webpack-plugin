@@ -1,7 +1,7 @@
 import {ApiLoader} from './api-loader'
 
 export type ApiConfig = {
-  name?: string,
+  name: string,
 
   url: string,
 }
