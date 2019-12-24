@@ -18,4 +18,4 @@ export type Config = {
    * tracking interval seconds. defaults to `600`
    */
   intervalSeconds?: number;
-};
+}

@@ -4,6 +4,6 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ["src/index.ts"],
   coverageDirectory: "coverage",
-  moduleFileExtensions: ["js", "ts"],
+  moduleFileExtensions: ["js", "ts", "json"],
   testEnvironment: "node"
 };

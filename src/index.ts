@@ -2,12 +2,16 @@ import {ApiConfig, Config} from "./config"
 import webpack from 'webpack'
 import {ApiLoader, HttpApiLoader} from "./api-loader";
 import {LowdbRepository, Repository} from "./repository";
+import express from 'express'
+import net from 'net'
+import open from 'open'
 
 export default class SwaggerApiTrackingWebpackPlugin {
   private readonly apis: Array<ApiConfig>
   private readonly apiLoader: ApiLoader
   private readonly intervalSeconds: number
   private readonly repository: Repository
+  private readonly server: net.Server
 
   constructor(cfg?: Config) {
     Object.assign(this, cfg);
@@ -18,16 +22,22 @@ export default class SwaggerApiTrackingWebpackPlugin {
       this.intervalSeconds = 3600
     }
     this.repository = new LowdbRepository()
+    this.server = this.setupServer()
   }
 
   public apply(compiler: webpack.Compiler): void {
-    let nextFireTime = this.repository.getNextFireTime()
-    const now = Date.now()
-    if (nextFireTime < now) {
-      this.tracking()
-    } else {
-      setTimeout(this.tracking.bind(this), nextFireTime - now)
-    }
+    this.firstTracking()
+  }
+
+  protected setupServer(): net.Server {
+    const app = express()
+
+    app.use('/static', express.static(__dirname + '/html'));
+
+    app.get('/', function (req, res) {
+      res.send('Hello World')
+    })
+    return app.listen()
   }
 
   private nextTracking(): void {
@@ -37,11 +47,34 @@ export default class SwaggerApiTrackingWebpackPlugin {
     setTimeout(this.tracking.bind(this), nextFireTime - now)
   }
 
-  private tracking(): void {
-    this.repository
-    console.log('name')
+  private firstTracking(): void {
+    let nextFireTime = this.repository.getNextFireTime()
+    const now = Date.now()
+    if (nextFireTime < now) {
+      this.tracking().then(() => {
+      })
+    } else {
+      setTimeout(this.tracking.bind(this), nextFireTime - now)
+    }
+  }
+
+  private async tracking(): Promise<void> {
+    for (const api of this.apis) {
+      try {
+        const apiContent = await this.apiLoader.load(api.url)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    //await this.open()
     this.nextTracking()
   }
+
+  private async open(): Promise<void> {
+    const address: any = this.server.address()
+    await open(`http://localhost:${address.port}/static/index.html`)
+  }
+
 }
 
 /*

@@ -1,0 +1,1055 @@
+{
+  "swagger": "3.0",
+  "info": {
+    "version": "1.0.74-SNAPSHOT:1577065388056",
+    "title": "com.togle.waybill:cloud Api"
+  },
+  "host": "localhost:9050",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "waybill-content-controller",
+      "description": "Waybill Content Controller"
+    },
+    {
+      "name": "waybill-template-controller",
+      "description": "Waybill Template Controller"
+    }
+  ],
+  "paths": {
+    "/api/v1/waybill/clear-contents": {
+      "post": {
+        "tags": [
+          "waybill-content-controller"
+        ],
+        "summary": "보존 기한이 지난 운송장 제거",
+        "operationId": "clearUsingPOST",
+        "consumes": [
+          "*/*"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "read",
+              "trust",
+              "write"
+            ]
+          }
+        ],
+        "deprecated": false
+      }
+    },
+    "/api/v1/waybill/contents": {
+      "post": {
+        "tags": [
+          "waybill-content-controller"
+        ],
+        "summary": "운송장 생성",
+        "operationId": "createUsingPOST",
+        "consumes": [
+          "*/*"
+        ],
+        "produces": [
+          "application/vnd.togle.waybill-description+json;charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/InputStreamResource"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "read",
+              "trust",
+              "write"
+            ]
+          }
+        ],
+        "deprecated": false
+      }
+    },
+    "/api/v1/waybill/contents/{id}": {
+      "get": {
+        "tags": [
+          "waybill-content-controller"
+        ],
+        "summary": "운송장 조회",
+        "operationId": "getUsingGET",
+        "consumes": [
+          "*/*"
+        ],
+        "produces": [
+          "application/vnd.togle.waybill-description+json;charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/InputStreamResource"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "read",
+              "trust",
+              "write"
+            ]
+          }
+        ],
+        "deprecated": false
+      },
+      "delete": {
+        "tags": [
+          "waybill-content-controller"
+        ],
+        "summary": "운송장 삭제",
+        "operationId": "deleteUsingDELETE",
+        "consumes": [
+          "*/*"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "read",
+              "trust",
+              "write"
+            ]
+          }
+        ],
+        "deprecated": false
+      }
+    },
+    "/api/v1/waybill/templates": {
+      "get": {
+        "tags": [
+          "waybill-template-controller"
+        ],
+        "summary": "운송장 템플릿  검색",
+        "operationId": "retrieveUsingGET",
+        "consumes": [
+          "*/*"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "enabled",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "unsorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "vendor",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "CJGLS",
+              "POST"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/WaybillTemplateView"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "read",
+              "trust",
+              "write"
+            ]
+          }
+        ],
+        "deprecated": false
+      },
+      "post": {
+        "tags": [
+          "waybill-template-controller"
+        ],
+        "summary": "운송장 템플릿 생성",
+        "operationId": "createUsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/WaybillTemplateData"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "read",
+              "trust",
+              "write"
+            ]
+          }
+        ],
+        "deprecated": false
+      }
+    },
+    "/api/v1/waybill/templates/{id}": {
+      "get": {
+        "tags": [
+          "waybill-template-controller"
+        ],
+        "summary": "운송장 템플릿 조회",
+        "operationId": "getUsingGET_1",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/WaybillTemplateData"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "read",
+              "trust",
+              "write"
+            ]
+          }
+        ],
+        "deprecated": false
+      },
+      "put": {
+        "tags": [
+          "waybill-template-controller"
+        ],
+        "summary": "운송장 템플릿 수정",
+        "operationId": "updateUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "read",
+              "trust",
+              "write"
+            ]
+          }
+        ],
+        "deprecated": false
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Authorization": {
+      "type": "apiKey",
+      "name": "apiKey",
+      "in": "header"
+    },
+    "Cookie": {
+      "type": "apiKey",
+      "name": "apiKey"
+    },
+    "oauth2": {
+      "type": "oauth2",
+      "tokenUrl": "http://dev-web/oauth/token",
+      "flow": "password",
+      "scopes": {
+        "read": "read all",
+        "write": "access all"
+      }
+    }
+  },
+  "definitions": {
+    "CreateRequest": {
+      "type": "object",
+      "properties": {
+        "backgroundImageUrl": {
+          "type": "string",
+          "description": "운송장 템플릿 배경 이미지 내용"
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "운송장 템플릿 활성화 여부"
+        },
+        "height": {
+          "type": "integer",
+          "format": "int32",
+          "description": "운송장 템플릿 높이"
+        },
+        "id": {
+          "type": "string",
+          "description": "운송장 템플릿 아이디"
+        },
+        "marginBottom": {
+          "type": "integer",
+          "format": "int32",
+          "description": "아랫 마진"
+        },
+        "marginLeft": {
+          "type": "integer",
+          "format": "int32",
+          "description": "왼쪽 마진"
+        },
+        "marginRight": {
+          "type": "integer",
+          "format": "int32",
+          "description": "오른쪽 마진"
+        },
+        "marginTop": {
+          "type": "integer",
+          "format": "int32",
+          "description": "윗 마진"
+        },
+        "name": {
+          "type": "string",
+          "description": "운송장 템플릿 이름"
+        },
+        "orientation": {
+          "type": "string",
+          "description": "운송장 템플릿 방향",
+          "enum": [
+            "PORTRAIT",
+            "LANDSCAPE"
+          ]
+        },
+        "pagesPerSheet": {
+          "type": "integer",
+          "format": "int32",
+          "description": "한장 당 페이지수"
+        },
+        "template": {
+          "type": "string",
+          "description": "운송장 템플릿 내용"
+        },
+        "vendor": {
+          "type": "string",
+          "description": "운송장 업체",
+          "enum": [
+            "CJGLS",
+            "POST"
+          ]
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "description": "운송장 템플릿 넓이"
+        }
+      },
+      "title": "CreateRequest"
+    },
+    "File": {
+      "type": "object",
+      "properties": {
+        "absolute": {
+          "type": "boolean"
+        },
+        "absoluteFile": {
+          "$ref": "#/definitions/File"
+        },
+        "absolutePath": {
+          "type": "string"
+        },
+        "canonicalFile": {
+          "$ref": "#/definitions/File"
+        },
+        "canonicalPath": {
+          "type": "string"
+        },
+        "directory": {
+          "type": "boolean"
+        },
+        "file": {
+          "type": "boolean"
+        },
+        "freeSpace": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "hidden": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parent": {
+          "type": "string"
+        },
+        "parentFile": {
+          "$ref": "#/definitions/File"
+        },
+        "path": {
+          "type": "string"
+        },
+        "totalSpace": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "usableSpace": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "File"
+    },
+    "InputStream": {
+      "type": "object",
+      "title": "InputStream"
+    },
+    "InputStreamResource": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "file": {
+          "$ref": "#/definitions/File"
+        },
+        "filename": {
+          "type": "string"
+        },
+        "inputStream": {
+          "$ref": "#/definitions/InputStream"
+        },
+        "open": {
+          "type": "boolean"
+        },
+        "readable": {
+          "type": "boolean"
+        },
+        "uri": {
+          "$ref": "#/definitions/URI"
+        },
+        "url": {
+          "$ref": "#/definitions/URL"
+        }
+      },
+      "title": "InputStreamResource"
+    },
+    "URI": {
+      "type": "object",
+      "properties": {
+        "absolute": {
+          "type": "boolean"
+        },
+        "authority": {
+          "type": "string"
+        },
+        "fragment": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "opaque": {
+          "type": "boolean"
+        },
+        "path": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "query": {
+          "type": "string"
+        },
+        "rawAuthority": {
+          "type": "string"
+        },
+        "rawFragment": {
+          "type": "string"
+        },
+        "rawPath": {
+          "type": "string"
+        },
+        "rawQuery": {
+          "type": "string"
+        },
+        "rawSchemeSpecificPart": {
+          "type": "string"
+        },
+        "rawUserInfo": {
+          "type": "string"
+        },
+        "scheme": {
+          "type": "string"
+        },
+        "schemeSpecificPart": {
+          "type": "string"
+        },
+        "userInfo": {
+          "type": "string"
+        }
+      },
+      "title": "URI"
+    },
+    "URL": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "type": "string"
+        },
+        "content": {
+          "type": "object"
+        },
+        "defaultPort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "file": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "query": {
+          "type": "string"
+        },
+        "ref": {
+          "type": "string"
+        },
+        "userInfo": {
+          "type": "string"
+        }
+      },
+      "title": "URL"
+    },
+    "UpdateRequest": {
+      "type": "object",
+      "properties": {
+        "backgroundImageUrl": {
+          "type": "string",
+          "description": "운송장 템플릿 배경 이미지 내용"
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "운송장 템플릿 활성화 여부"
+        },
+        "height": {
+          "type": "integer",
+          "format": "int32",
+          "description": "운송장 템플릿 높이"
+        },
+        "id": {
+          "type": "string",
+          "description": "운송장 템플릿 아이디"
+        },
+        "marginBottom": {
+          "type": "integer",
+          "format": "int32",
+          "description": "아랫 마진"
+        },
+        "marginLeft": {
+          "type": "integer",
+          "format": "int32",
+          "description": "왼쪽 마진"
+        },
+        "marginRight": {
+          "type": "integer",
+          "format": "int32",
+          "description": "오른쪽 마진"
+        },
+        "marginTop": {
+          "type": "integer",
+          "format": "int32",
+          "description": "윗 마진"
+        },
+        "name": {
+          "type": "string",
+          "description": "운송장 템플릿 이름"
+        },
+        "orientation": {
+          "type": "string",
+          "description": "운송장 템플릿 방향",
+          "enum": [
+            "PORTRAIT",
+            "LANDSCAPE"
+          ]
+        },
+        "pagesPerSheet": {
+          "type": "integer",
+          "format": "int32",
+          "description": "한장 당 페이지수"
+        },
+        "template": {
+          "type": "string",
+          "description": "운송장 템플릿 내용"
+        },
+        "vendor": {
+          "type": "string",
+          "description": "운송장 업체",
+          "enum": [
+            "CJGLS",
+            "POST"
+          ]
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "description": "운송장 템플릿 넓이"
+        }
+      },
+      "title": "UpdateRequest"
+    },
+    "WaybillContentId": {
+      "type": "object",
+      "title": "WaybillContentId"
+    },
+    "WaybillData": {
+      "type": "object",
+      "properties": {
+        "charge": {
+          "type": "string"
+        },
+        "chargeMethodLabel": {
+          "type": "string"
+        },
+        "delivererName": {
+          "type": "string"
+        },
+        "delivererNickname": {
+          "type": "string"
+        },
+        "deliveryMessage": {
+          "type": "string"
+        },
+        "deliverySpotName": {
+          "type": "string"
+        },
+        "farawayCharge": {
+          "type": "string"
+        },
+        "invoiceNumber": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WaybillItemData"
+          }
+        },
+        "orderNumber": {
+          "type": "string"
+        },
+        "receiptDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "receiverBaseAddress": {
+          "type": "string"
+        },
+        "receiverDetailAddress": {
+          "type": "string"
+        },
+        "receiverName": {
+          "type": "string"
+        },
+        "receiverPhoneNumber": {
+          "type": "string"
+        },
+        "receiverPostCode": {
+          "type": "string"
+        },
+        "receiverSmallAddress": {
+          "type": "string"
+        },
+        "receiverSparePhoneNumber": {
+          "type": "string"
+        },
+        "senderBaseAddress": {
+          "type": "string"
+        },
+        "senderDetailAddress": {
+          "type": "string"
+        },
+        "senderName": {
+          "type": "string"
+        },
+        "senderPhoneNumber": {
+          "type": "string"
+        },
+        "senderPostCode": {
+          "type": "string"
+        },
+        "terminalCode": {
+          "type": "string"
+        },
+        "terminalSubCode": {
+          "type": "string"
+        },
+        "totalItemQuantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "WaybillData"
+    },
+    "WaybillItemData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "WaybillItemData"
+    },
+    "WaybillTemplateData": {
+      "type": "object",
+      "properties": {
+        "backgroundImageUrl": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "height": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "string"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "marginBottom": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "marginLeft": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "marginRight": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "marginTop": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "orientation": {
+          "type": "string",
+          "enum": [
+            "PORTRAIT",
+            "LANDSCAPE"
+          ]
+        },
+        "pagesPerSheet": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "template": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string",
+          "enum": [
+            "CJGLS",
+            "POST"
+          ]
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "WaybillTemplateData"
+    },
+    "WaybillTemplateId": {
+      "type": "object",
+      "title": "WaybillTemplateId"
+    },
+    "WaybillTemplateView": {
+      "type": "object",
+      "properties": {
+        "backgroundImageUrl": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "height": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "string"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "name": {
+          "type": "string"
+        },
+        "orientation": {
+          "type": "string",
+          "enum": [
+            "PORTRAIT",
+            "LANDSCAPE"
+          ]
+        },
+        "pagesPerSheet": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "vendor": {
+          "type": "string",
+          "enum": [
+            "CJGLS",
+            "POST"
+          ]
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "WaybillTemplateView"
+    }
+  }
+}

@@ -23,16 +23,27 @@
     "@types/jest": "^24.0.24",
     "@types/node": "^12.12.21",
     "@types/node-fetch": "^2.5.4",
+    "@types/shelljs": "^0.8.6",
     "@types/webpack": "^4.41.0",
+    "@types/webpack-dev-server": "^3.9.0",
     "jest": "^24.9.0",
+    "mime": "^2.4.4",
     "rimraf": "^3.0.0",
     "ts-jest": "^24.2.0",
     "typescript": "^3.7.4",
-    "webpack": "^4.41.4"
+    "webpack": "^4.41.4",
+    "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
     "@types/lowdb": "^1.0.9",
+    "@types/uuid": "^3.4.6",
+    "express": "^4.17.1",
+    "lodash-id": "^0.14.0",
     "lowdb": "^1.0.0",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "open": "^7.0.0",
+    "shelljs": "^0.8.3",
+    "swagger-diff": "^0.6.0",
+    "uuid": "^3.3.3"
   }
 }
