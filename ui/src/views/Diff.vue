@@ -26,14 +26,19 @@
             <md-field>
               <label for="from">from version</label>
               <md-select id="from" name="from" v-model="from">
-                <md-option :key="version.createdAt" :value="version.id" v-for="version in fromVersions.models">{{version.version}} - {{version.createdAt}}</md-option>
+                <md-option :key="format(version.createdAt)" :value="version.id" v-for="version in fromVersions.models">{{version.version}} - {{format(version.createdAt)}}</md-option>
               </md-select>
             </md-field>
           </md-list-item>
 
           <md-list-item>
             <md-icon>chevron_right</md-icon>
-            <span class="md-list-item-text">Trash</span>
+            <md-field>
+              <label for="to">to version</label>
+              <md-select id="to" name="to" v-model="to">
+                <md-option :key="format(version.createdAt)" :value="version.id" v-for="version in toVersions.models">{{version.version}} - {{format(version.createdAt)}}</md-option>
+              </md-select>
+            </md-field>
           </md-list-item>
 
           <md-list-item>
@@ -67,6 +72,7 @@
 <script>
   // @ is an alias to /src
   import {ApiCollection, ApiConfigCollection} from "@/model/api"
+  import moment from 'moment'
 
   export default {
     name: 'diff',
@@ -96,6 +102,11 @@
         console.log(this.fromVersions)
         this.from = null
         this.to = null
+      }
+    },
+    methods: {
+      format(date) {
+        return moment(date).format()
       }
     }
   };

@@ -67,8 +67,12 @@ export class Api {
 
   private _version: string
 
+  get id(): string {
+    return this._id
+  }
+
   get version(): string {
-    return this._name
+    return this._version
   }
 
   private _createdAt: Date
