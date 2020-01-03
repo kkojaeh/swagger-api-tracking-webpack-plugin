@@ -1,6 +1,7 @@
-import {LowdbRepository, Repository} from "../src/repository"
+import "reflect-metadata";
+import Repository from "../src/repository"
+import LowdbRepository from "../src/impl/lowdb-repository"
 import {Api} from "../src/api"
-// TODO: test for registerSnoreToast
 
 describe('repository', () => {
 

@@ -8,9 +8,15 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "target": "es5",
+    "types": [
+      "reflect-metadata",
+      "jest"
+    ],
     "lib": [
-      "es2015"
+      "es6"
     ]
   },
   "files": [

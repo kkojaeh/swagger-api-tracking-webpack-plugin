@@ -1,5 +1,3 @@
-import {ApiLoader} from './api-loader'
-
 export type ApiConfig = {
   name: string,
 
@@ -12,10 +10,13 @@ export type Config = {
    */
   apis: Array<ApiConfig>,
 
-  apiLoader: ApiLoader
-
   /**
    * tracking interval seconds. defaults to `600`
    */
   intervalSeconds?: number;
+
+  /**
+   * api keep size. defaults to `20`
+   */
+  keepSize?: number
 }

@@ -1,4 +1,5 @@
-import {Swagger2ApiResolver} from "../src/api-resolver";
+import "reflect-metadata";
+import Swagger2ApiResolver from "../src/impl/swagger2-api-resolver";
 import v1Api from './swagger-api/swagger2-v1.json'
 import v1IgnoredDiffApi from './swagger-api/swagger2-v1-ignored-diff.json'
 import invalidApi from './swagger-api/swagger2-invalid.json'

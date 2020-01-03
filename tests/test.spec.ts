@@ -1,7 +1,17 @@
+import "reflect-metadata";
 import webpack from 'webpack';
 import getWebpackConfig from './webpack.config';
-import {ApiLoader} from "../src/api-loader";
+import ApiLoader from "../src/api-loader";
 import v1 from './swagger-api/swagger2-v1.json'
+import TYPES from "../src/types";
+import Plugin from "../src/plugin";
+import {Config} from "../src/config";
+import {Container} from "inversify";
+import Repository from "../src/repository";
+import LowdbRepository from "../src/impl/lowdb-repository";
+import ApiResolver from "../src/api-resolver";
+import Swagger2ApiResolver from "../src/impl/swagger2-api-resolver";
+
 
 class TestApiLoader implements ApiLoader {
   public api: Object
@@ -11,35 +21,36 @@ class TestApiLoader implements ApiLoader {
   }
 }
 
+
 const testApiLoader = new TestApiLoader()
+const container = new Container()
+container.bind<Repository>(TYPES.Repository).to(LowdbRepository)
+container.bind<ApiResolver>(TYPES.ApiResolver).to(Swagger2ApiResolver)
+container.bind<webpack.Plugin>(TYPES.Plugin).to(Plugin)
+container.bind<ApiLoader>(TYPES.ApiLoader).toConstantValue(testApiLoader)
+container.bind<Config>(TYPES.Config).toConstantValue({
+  apis: [{
+    name: "test",
+    url: "http://test/api.json"
+  }],
+  intervalSeconds: 5
+})
+
+let plugin = container.get<webpack.Plugin>(TYPES.Plugin)
 
 describe('Test Webpack build', () => {
-  const platform = process.platform;
-  const arch = process.arch;
 
-  afterAll(() => {
-    if (platform !== process.platform) {
-      Object.defineProperty(process, 'platform', {
-        value: platform
-      });
-      Object.defineProperty(process, 'arch', {
-        value: arch
-      });
-    }
-  });
+  beforeEach(() => {
+
+
+  })
 
   it('Should not show an initial success notification when suppressSuccess is "initial"', (done) => {
     //expect.assertions(1);
     testApiLoader.api = v1
-    const compiler = webpack(getWebpackConfig({
-      apis: [{
-        name: "test",
-        url: "http://test/api.json"
-      }],
-      apiLoader: testApiLoader
-    }), (err, stats) => {
+    const compiler = webpack(getWebpackConfig(plugin), (err, stats) => {
       //expect(notifier.notify).not.toHaveBeenCalled();
       done();
     });
-  });
-});
+  })
+})

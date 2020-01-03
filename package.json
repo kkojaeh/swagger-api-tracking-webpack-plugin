@@ -8,7 +8,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npm run clean && tsc",
+    "prebuild": "(cd ui && yarn build)",
+    "build": "yarn clean && tsc",
     "clean": "rimraf dist tests/assets",
     "test": "jest"
   },
@@ -26,6 +27,8 @@
     "@types/shelljs": "^0.8.6",
     "@types/webpack": "^4.41.0",
     "@types/webpack-dev-server": "^3.9.0",
+    "@types/lowdb": "^1.0.9",
+    "@types/uuid": "^3.4.6",
     "jest": "^24.9.0",
     "mime": "^2.4.4",
     "rimraf": "^3.0.0",
@@ -35,15 +38,16 @@
     "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
-    "@types/lowdb": "^1.0.9",
-    "@types/uuid": "^3.4.6",
     "express": "^4.17.1",
+    "inversify": "^5.0.1",
     "lodash-id": "^0.14.0",
     "lowdb": "^1.0.0",
     "node-fetch": "^2.6.0",
     "open": "^7.0.0",
+    "reflect-metadata": "^0.1.13",
     "shelljs": "^0.8.3",
     "swagger-diff": "^0.6.0",
+    "ui": "file:./ui",
     "uuid": "^3.3.3"
   }
 }

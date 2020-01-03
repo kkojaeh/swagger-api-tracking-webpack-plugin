@@ -1,12 +1,11 @@
-import SwaggerApiTrackingWebpackPlugin from '../src/index';
+import Plugin from '../src/index';
 import webpack from 'webpack';
 import path from 'path';
-import {Config} from '../src/config';
 
 const getFullPath = (p: string) => path.resolve(__dirname, p);
 
 const getWebpackConfig = (
-  pluginConfig: Config
+  plugin: Plugin
 ): webpack.Configuration => ({
   entry: getFullPath(`file.js`),
   output: {
@@ -27,10 +26,7 @@ const getWebpackConfig = (
     extensions: [".js"]
   },
   plugins: [
-    new SwaggerApiTrackingWebpackPlugin({
-      ...pluginConfig,
-      intervalSeconds: 5
-    })
+    plugin
   ]
 });
 

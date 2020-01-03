@@ -4,6 +4,12 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ["src/index.ts"],
   coverageDirectory: "coverage",
+  modulePathIgnorePatterns: ['ui'],
   moduleFileExtensions: ["js", "ts", "json"],
-  testEnvironment: "node"
+  testEnvironment: "node",
+  "globals": {
+    "ts-jest": {
+      "diagnostics": true
+    }
+  }
 };
