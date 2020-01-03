@@ -4,7 +4,7 @@ import TYPES from "./types";
 import {Config} from "./config";
 
 
-export default class implements webpack.Plugin {
+class SwaggerApiTrackingWebpackPlugin implements webpack.Plugin {
 
   constructor(cfg?: Config) {
     container.bind<Config>(TYPES.Config).toConstantValue(cfg!)
@@ -16,3 +16,6 @@ export default class implements webpack.Plugin {
   }
 
 }
+
+
+module.exports = SwaggerApiTrackingWebpackPlugin

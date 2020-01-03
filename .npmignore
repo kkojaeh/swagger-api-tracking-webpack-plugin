@@ -12,4 +12,7 @@ tsconfig.json
 typings
 docs-util.js
 *.iml
-converage
+coverage
+/ui
+tests
+.idea

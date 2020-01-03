@@ -33,6 +33,8 @@ export default class implements webpack.Plugin {
       this.keepSize = 20
     }
     this.server = this.setupServer()
+    const address: any = this.server.address()
+    console.info(`http://localhost:${address.port}/index.html`)
   }
 
   public apply(compiler: webpack.Compiler): void {
@@ -42,7 +44,7 @@ export default class implements webpack.Plugin {
   protected setupServer(): net.Server {
     const app = express()
 
-    app.use('/static', express.static(__dirname + '/html'));
+    app.use(express.static(__dirname + '/ui'));
 
     app.get('/configs', (req, res) => {
       res.json(this.apis)
@@ -60,7 +62,7 @@ export default class implements webpack.Plugin {
   }
 
   protected async notify(api: Api): Promise<void> {
-    //await this.open()
+    await this.open()
   }
 
   private nextTracking(): void {

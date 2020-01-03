@@ -22,8 +22,9 @@ export default class Swagger2ApiResolver implements ApiResolver {
     this.validate(oa)
     this.validate(ob)
     const diff = await swaggerDiff(oa, ob, {});
+    console.log(JSON.stringify(diff))
     const results = [
-      ...diff.unmatchDiffs.map(this.to(ApiDiffLevel.CRITICAL)),
+      ...diff.unmatchDiffs.map(this.toUnmatchDiffs(ApiDiffLevel.CRITICAL)),
       ...diff.errors.map(this.to(ApiDiffLevel.ERROR)),
       ...diff.warnings.map(this.to(ApiDiffLevel.WARNING)),
       ...diff.infos.map(this.to(ApiDiffLevel.INFO))
@@ -47,6 +48,21 @@ export default class Swagger2ApiResolver implements ApiResolver {
         type: e.ruleId,
         location: e.path,
         message: e.message,
+        level: level
+      }
+    }
+  }
+
+  private toUnmatchDiffs(level: ApiDiffLevel): Function {
+    const kinds: { [index: string]: any } = {
+      "D": "deleted",
+      "N": "new"
+    }
+    return (e: any): ApiDiff => {
+      return {
+        type: e.ruleId,
+        location: e.path.join(" "),
+        message: kinds[e.kind],
         level: level
       }
     }

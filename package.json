@@ -1,6 +1,6 @@
 {
-  "name": "swagger-api-tracking-webpack-plugin",
-  "version": "0.0.1-beta.1",
+  "name": "swagger-api-tracking-webpack-plugin9",
+  "version": "0.0.1",
   "description": "it's webpack plugin for tracking swagger api changes",
   "engines": {
     "node": ">=8.6.0"
@@ -10,6 +10,7 @@
   "scripts": {
     "prebuild": "(cd ui && yarn build)",
     "build": "yarn clean && tsc",
+    "postbuild": "(mkdir dist/ui && cp -rf ui/dist/* dist/ui/)",
     "clean": "rimraf dist tests/assets",
     "test": "jest"
   },
@@ -47,7 +48,6 @@
     "reflect-metadata": "^0.1.13",
     "shelljs": "^0.8.3",
     "swagger-diff": "^0.6.0",
-    "ui": "file:./ui",
     "uuid": "^3.3.3"
   }
 }
