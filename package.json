@@ -12,7 +12,7 @@
     "build": "yarn clean && tsc",
     "postbuild": "(mkdir dist/ui && cp -rf ui/dist/* dist/ui/)",
     "clean": "rimraf dist tests/assets",
-    "postversion": "git push && git push --tags && npm publish"
+    "postversion": "git push && git push --tags && npm publish --access public"
   },
   "keywords": [
     "swagger",
