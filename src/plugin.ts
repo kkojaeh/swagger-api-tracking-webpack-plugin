@@ -43,6 +43,12 @@ export default class implements webpack.Plugin {
 
   protected setupServer(): net.Server {
     const app = express()
+    const router = express.Router();
+    const path = require('path');
+
+    router.get('/', (req, res, next) => {
+      res.sendFile(path.join(__dirname, '/ui', 'index.html'));
+    });
 
     app.use(express.static(__dirname + '/ui'));
 
