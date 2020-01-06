@@ -34,7 +34,7 @@ export default class implements webpack.Plugin {
     }
     this.server = this.setupServer()
     const address: any = this.server.address()
-    console.info(`http://localhost:${address.port}/index.html`)
+    console.info('swagger-api-tracking-webpack-plugin', `http://localhost:${address.port}/diff`)
   }
 
   public apply(compiler: webpack.Compiler): void {
@@ -61,8 +61,9 @@ export default class implements webpack.Plugin {
     return app.listen()
   }
 
-  protected async notify(api: Api): Promise<void> {
-    await this.open()
+  protected async notify(latestApi: Api, api: Api): Promise<void> {
+    const address: any = this.server.address()
+    await open(`http://localhost:${address.port}/diff?name=${api.name}&from-api-id=${latestApi.id}&to-api-id=${api.id}`)
   }
 
   private nextTracking(): void {
@@ -108,19 +109,16 @@ export default class implements webpack.Plugin {
           }
           this.repository.add(api)
           this.repository.setContent(api.id!, content)
-          await this.notify(api)
+          if (latestApi) {
+            await this.notify(latestApi, api)
+          }
         }
       } catch (e) {
-        console.error(e)
+        console.error(e.message)
         continue
       }
     }
     this.nextTracking()
-  }
-
-  private async open(): Promise<void> {
-    const address: any = this.server.address()
-    await open(`http://localhost:${address.port}/static/index.html`)
   }
 
 }

@@ -1,73 +1,58 @@
 <template>
-  <div class="page-container">
-    <md-app>
-      <md-app-toolbar class="md-primary">
-        <span class="md-title">My Title</span>
-      </md-app-toolbar>
+  <md-app>
+    <md-app-toolbar class="md-primary">
+      <span class="md-title">API Diff</span>
+    </md-app-toolbar>
 
-      <md-app-drawer md-permanent="full">
-        <md-toolbar class="md-transparent" md-elevation="0">
-          API Diff
-        </md-toolbar>
+    <md-app-drawer md-permanent="full">
+      <md-toolbar class="md-transparent" md-elevation="0">
+        API Diff
+      </md-toolbar>
 
-        <md-list>
-          <md-list-item>
-            <md-icon>inbox</md-icon>
-            <md-field>
-              <label for="name">API</label>
-              <md-select id="name" name="name" v-model="name">
-                <md-option :key="config.name" :value="config.name" v-for="config in configs.models">{{config.name}}</md-option>
-              </md-select>
-            </md-field>
-          </md-list-item>
+      <md-list>
+        <md-list-item>
+          <md-icon>inbox</md-icon>
+          <md-field>
+            <label for="name">API</label>
+            <md-select id="name" name="name" v-model="name">
+              <md-option :key="config.name" :value="config.name" v-for="config in configs.models">{{config.name}}</md-option>
+            </md-select>
+          </md-field>
+        </md-list-item>
 
-          <md-list-item>
-            <md-icon>chevron_left</md-icon>
-            <md-field>
-              <label for="from">from version</label>
-              <md-select id="from" name="from" v-model="from">
-                <md-option :key="format(version.createdAt)" :value="version.id" v-for="version in fromVersions.models">{{version.version}} - {{format(version.createdAt)}}</md-option>
-              </md-select>
-            </md-field>
-          </md-list-item>
+        <md-list-item>
+          <md-icon>chevron_left</md-icon>
+          <md-field>
+            <label for="from">from version</label>
+            <md-select id="fromApiId" name="fromApiId" v-model="fromApiId">
+              <md-option :key="format(version.createdAt)" :value="version.id" v-for="version in fromApis.models">{{version.version}} <sup>({{format(version.createdAt)}})</sup></md-option>
+            </md-select>
+          </md-field>
+        </md-list-item>
 
-          <md-list-item>
-            <md-icon>chevron_right</md-icon>
-            <md-field>
-              <label for="to">to version</label>
-              <md-select id="to" name="to" v-model="to">
-                <md-option :key="format(version.createdAt)" :value="version.id" v-for="version in toVersions.models">{{version.version}} - {{format(version.createdAt)}}</md-option>
-              </md-select>
-            </md-field>
-          </md-list-item>
+        <md-list-item>
+          <md-icon>chevron_right</md-icon>
+          <md-field>
+            <label for="to">to version</label>
+            <md-select id="toApiId" name="toApiId" v-model="toApiId">
+              <md-option :key="format(version.createdAt)" :value="version.id" v-for="version in toApis.models">{{version.version}} <sup>({{format(version.createdAt)}})</sup></md-option>
+            </md-select>
+          </md-field>
+        </md-list-item>
+      </md-list>
+    </md-app-drawer>
 
-          <md-list-item>
-            <md-icon>error</md-icon>
-            <span class="md-list-item-text">Spam</span>
-          </md-list-item>
-        </md-list>
-      </md-app-drawer>
-
-      <md-app-content>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae
-          maxime? Quae non explicabo, neque.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae
-          maxime? Quae non explicabo, neque.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae
-          maxime? Quae non explicabo, neque.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae
-          maxime? Quae non explicabo, neque.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae
-          maxime? Quae non explicabo, neque.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae
-          maxime? Quae non explicabo, neque.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae
-          maxime? Quae non explicabo, neque.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae
-          maxime? Quae non explicabo, neque.</p>
-      </md-app-content>
-    </md-app>
-  </div>
+    <md-app-content>
+      <md-table v-model="diffs">
+        <md-table-row slot="md-table-row" slot-scope="{ item }">
+          <md-table-cell md-label="Level">{{ item.level }}</md-table-cell>
+          <md-table-cell md-label="Type">{{ item.type }}</md-table-cell>
+          <md-table-cell md-label="Location">{{ item.location }}</md-table-cell>
+          <md-table-cell md-label="Message">{{ item.message }}</md-table-cell>
+        </md-table-row>
+      </md-table>
+    </md-app-content>
+  </md-app>
 </template>
 <script>
   // @ is an alias to /src
@@ -78,47 +63,122 @@
     name: 'diff',
     async mounted() {
       this.configs = await ApiConfigCollection.get()
-      console.log(this.configs)
+      this.name = this.$route.query.name
+      this.fromApiId = this.$route.query['from-api-id']
+      this.toApiId = this.$route.query['to-api-id']
+      await this.fromQuery()
     },
     data() {
       return {
         name: null,
-        from: null,
-        to: null,
+        fromApiId: null,
+        toApiId: null,
+        fromApi: null,
+        toApi: null,
         configs: new ApiConfigCollection([]),
-        fromVersions: new ApiCollection([]),
-        toVersions: new ApiCollection([]),
+        fromApis: new ApiCollection([]),
+        toApis: new ApiCollection([]),
+        diffs: []
       }
     },
     watch: {
-      name: async function (value) {
-        if (value) {
-          this.fromVersions = await ApiCollection.get(name)
-          this.toVersions = await ApiCollection.get(name)
-        } else {
-          this.fromVersions = new ApiCollection([])
-          this.toVersions = new ApiCollection([])
-        }
-        console.log(this.fromVersions)
-        this.from = null
-        this.to = null
+      '$route.query': async function (value) {
+        this.name = this.$route.query.name
+        this.fromApiId = this.$route.query['from-api-id']
+        this.toApiId = this.$route.query['to-api-id']
+        await this.fromQuery()
+      },
+      name(value) {
+        this.assignQuery()
+      },
+      toApiId(value) {
+        this.assignQuery()
+      },
+      fromApiId(value) {
+        this.assignQuery()
+      },
+      fromApi: function (value) {
+        this.showDiffs()
+      },
+      toApi: function (value) {
+        this.showDiffs()
       }
     },
     methods: {
       format(date) {
-        return moment(date).format()
+        return moment(date).format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS)
+      },
+      async showDiffs() {
+        if (this.fromApi && this.toApi) {
+          this.diffs = await this.fromApi.diffs(this.toApi)
+        } else {
+          this.diffs = []
+        }
+      },
+      async fromQuery() {
+        if (this.name) {
+          const apis = await ApiCollection.get(this.name)
+          this.fromApis = apis.clone()
+          this.toApis = apis.clone()
+        } else {
+          this.fromApis = new ApiCollection([])
+          this.toApis = new ApiCollection([])
+          this.fromApiId = null
+          this.toApiId = null
+        }
+        if (this.fromApiId) {
+          this.fromApi = this.fromApis.findById(this.fromApiId)
+          this.toApis.filterAfterAt(this.fromApi.createdAt)
+          if (this.toApiId) {
+            const to = this.toApis.findById(this.toApiId)
+            if (!to) {
+              this.toApiId = null
+            }
+          }
+        } else {
+          this.toApis.clearFilter()
+          this.fromApi = null
+        }
+        if (this.toApiId) {
+          this.toApi = this.toApis.findById(this.toApiId)
+          this.fromApis.filterBeforeAt(this.toApi.createdAt)
+          if (this.fromApiId) {
+            const from = this.fromApis.findById(this.fromApiId)
+            if (!from) {
+              this.fromApiId = null
+            }
+          }
+        } else {
+          this.fromApis.clearFilter()
+          this.toApi = null
+        }
+      },
+      assignQuery() {
+        const query = {}
+        if (this.fromApiId) {
+          query["from-api-id"] = this.fromApiId
+        }
+        if (this.toApiId) {
+          query["to-api-id"] = this.toApiId
+        }
+        if (this.name) {
+          query["name"] = this.name
+        }
+        this.$router.replace({
+          query: query
+        }).catch((err) => {
+        })
       }
     }
   };
 </script>
 <style>
   .md-app {
-    max-height: 400px;
     border: 1px solid rgba(#000, .12);
   }
 
   .md-drawer {
-    width: 230px;
+    width: 350px;
     max-width: calc(100vw - 125px);
   }
 </style>

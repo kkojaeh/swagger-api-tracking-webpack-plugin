@@ -81,12 +81,12 @@ export class Api {
     return this._createdAt
   }
 
-  async diff(to: Api): Promise<ApiDiff> {
+  async diffs(to: Api): Promise<Array<ApiDiff>> {
     let url = `/apis/${this._id}/diff/${to._id}`
     if (development) {
       url = "/diff.json"
     }
-    const response = await axios.get<ApiDiff>(url)
+    const response = await axios.get<Array<ApiDiff>>(url)
     return response.data
   }
 }
@@ -108,14 +108,17 @@ export enum ApiDiffLevel {
 
 export class ApiCollection {
 
-  constructor(models: Array<Api>) {
-    this._models = models
-  }
+  private _filtered?: Array<Api> | null
 
   private _models: Array<Api>
 
+  constructor(models: Array<Api>) {
+    this._models = models
+    this._filtered = null
+  }
+
   get models(): Array<Api> {
-    return this._models
+    return this._filtered || this._models
   }
 
   static async get(name: string): Promise<ApiCollection> {
@@ -125,6 +128,29 @@ export class ApiCollection {
     }
     const response = await axios.get<Array<ApiType>>(url)
     return new ApiCollection(response.data.map(data => new Api(data)))
+  }
+
+  filterBeforeAt(at: Date): void {
+    this._filtered = this._models.filter((model) => model.createdAt < at)
+  }
+
+  filterAfterAt(at: Date): void {
+    this._filtered = this._models.filter((model) => model.createdAt > at)
+  }
+
+  clearFilter(): void {
+    this._filtered = null
+  }
+
+  findById(id: string): Api | undefined {
+    return (this._filtered || this._models).find((model) => model.id == id)
+  }
+
+  clone(): ApiCollection {
+    const cloned = new ApiCollection([])
+    cloned._models = this._models
+    cloned._filtered = this._filtered
+    return cloned
   }
 
 }
