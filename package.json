@@ -1,6 +1,6 @@
 {
   "name": "swagger-api-tracking-webpack-plugin",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "it's webpack plugin for tracking swagger api changes",
   "engines": {
     "node": ">=8.6.0"
