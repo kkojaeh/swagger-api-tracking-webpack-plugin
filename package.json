@@ -23,13 +23,13 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^24.0.24",
+    "@types/lowdb": "^1.0.9",
     "@types/node": "^12.12.21",
     "@types/node-fetch": "^2.5.4",
     "@types/shelljs": "^0.8.6",
+    "@types/uuid": "^3.4.6",
     "@types/webpack": "^4.41.0",
     "@types/webpack-dev-server": "^3.9.0",
-    "@types/lowdb": "^1.0.9",
-    "@types/uuid": "^3.4.6",
     "jest": "^24.9.0",
     "mime": "^2.4.4",
     "rimraf": "^3.0.0",
@@ -39,6 +39,7 @@
     "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
+    "execa": "^4.0.0",
     "express": "^4.17.1",
     "inversify": "^5.0.1",
     "lodash-id": "^0.14.0",

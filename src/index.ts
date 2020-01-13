@@ -1,13 +1,13 @@
 import container from "./inversify.config";
 import webpack from "webpack";
 import TYPES from "./types";
-import {Config} from "./config";
+import {Config, DefaultConfig} from "./config";
 
 
 class SwaggerApiTrackingWebpackPlugin implements webpack.Plugin {
 
-  constructor(cfg?: Config) {
-    container.bind<Config>(TYPES.Config).toConstantValue(cfg!)
+  constructor(cfg: Config) {
+    container.bind<Config>(TYPES.Config).toConstantValue(new DefaultConfig(cfg))
   }
 
   apply(compiler: webpack.Compiler): void {

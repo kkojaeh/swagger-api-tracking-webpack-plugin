@@ -4,9 +4,9 @@ export default interface ApiResolver {
 
   resolve(api: any): Api
 
-  equals(a: any, b: any): boolean
+  equals(from: any, to: any): boolean
 
-  diff(a: any, b: any): Promise<Array<ApiDiff>>
+  diff(from: any, to: any): Promise<Array<ApiDiff>>
 }
 
 

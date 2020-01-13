@@ -7,10 +7,10 @@ import TYPES from "../src/types";
 import Plugin from "../src/plugin";
 import {Config} from "../src/config";
 import {Container} from "inversify";
-import Repository from "../src/repository";
-import LowdbRepository from "../src/impl/lowdb-repository";
+import ApiRepository from "../src/api-repository";
+import ApiRepositoryLowdb from "../src/impl/api-repository-lowdb";
 import ApiResolver from "../src/api-resolver";
-import Swagger2ApiResolver from "../src/impl/swagger2-api-resolver";
+import ApiResolverSwaggerDiff from "../src/impl/api-resolver-swagger2";
 
 
 class TestApiLoader implements ApiLoader {
@@ -24,8 +24,8 @@ class TestApiLoader implements ApiLoader {
 
 const testApiLoader = new TestApiLoader()
 const container = new Container()
-container.bind<Repository>(TYPES.Repository).to(LowdbRepository)
-container.bind<ApiResolver>(TYPES.ApiResolver).to(Swagger2ApiResolver)
+container.bind<ApiRepository>(TYPES.ApiRepository).to(ApiRepositoryLowdb)
+container.bind<ApiResolver>(TYPES.ApiResolver).to(ApiResolverSwaggerDiff)
 container.bind<webpack.Plugin>(TYPES.Plugin).to(Plugin)
 container.bind<ApiLoader>(TYPES.ApiLoader).toConstantValue(testApiLoader)
 container.bind<Config>(TYPES.Config).toConstantValue({

@@ -92,17 +92,24 @@ export class Api {
 }
 
 export type ApiDiff = {
-  type: string
+  method: ApiMethod
+  type: ApiDiffType
   location: string
   message: string
-  level: ApiDiffLevel
 }
 
-export enum ApiDiffLevel {
-  WARNING = 'warning',
-  ERROR = 'error',
-  INFO = 'info',
-  CRITICAL = 'critical'
+export enum ApiMethod {
+  GET = 'GET',
+  PUT = 'PUT',
+  POST = 'POST',
+  DELETE = 'DELETE'
+}
+
+
+export enum ApiDiffType {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete'
 }
 
 

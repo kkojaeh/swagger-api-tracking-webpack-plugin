@@ -45,8 +45,8 @@
     <md-app-content>
       <md-table v-model="diffs">
         <md-table-row slot="md-table-row" slot-scope="{ item }">
-          <md-table-cell md-label="Level">{{ item.level }}</md-table-cell>
           <md-table-cell md-label="Type">{{ item.type }}</md-table-cell>
+          <md-table-cell md-label="Method">{{ item.method }}</md-table-cell>
           <md-table-cell md-label="Location">{{ item.location }}</md-table-cell>
           <md-table-cell md-label="Message">{{ item.message }}</md-table-cell>
         </md-table-row>

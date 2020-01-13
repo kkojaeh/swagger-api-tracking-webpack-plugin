@@ -1,3 +1,8 @@
+import fs from "fs"
+import os from "os"
+
+const homedir = os.homedir();
+
 export type ApiConfig = {
   name: string,
 
@@ -19,4 +24,34 @@ export type Config = {
    * api keep size. defaults to `20`
    */
   keepSize?: number
+
+  /**
+   * file location for persist. defaults to `[homedir]/.swagger-api-tracking-webpack-plugin`
+   */
+  workSpace?: string
+}
+
+export class DefaultConfig implements Config {
+
+  apis: Array<ApiConfig>;
+  intervalSeconds: number;
+  keepSize: number;
+  workSpace: string;
+
+  constructor(cfg?: Config) {
+    Object.assign(this, cfg)
+    if (this.intervalSeconds == undefined) {
+      this.intervalSeconds = 3600
+    }
+    if (this.keepSize == undefined) {
+      this.keepSize = 20
+    }
+    if (this.workSpace == undefined) {
+      this.workSpace = `${homedir}/.swagger-api-tracking-webpack-plugin`
+    }
+    if (!fs.existsSync(this.workSpace)) {
+      fs.mkdirSync(this.workSpace)
+    }
+  }
+
 }
