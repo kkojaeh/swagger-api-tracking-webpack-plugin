@@ -8,9 +8,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prebuild": "(cd ui && yarn build)",
+    "prebuild": "yarn build:ui",
     "build": "yarn clean && tsc",
-    "postbuild": "(mkdir dist/ui && cp -rf ui/dist/* dist/ui/)",
+    "postbuild": "yarn copy:jar && yarn copy:ui",
+    "build:ui": "(cd ui && yarn build)",
+    "copy:jar": "cp -rf src/impl/*.jar dist/impl/",
+    "copy:ui": "mkdir dist/ui && cp -rf ui/dist/* dist/ui/",
     "clean": "rimraf dist tests/assets",
     "postversion": "git push && git push --tags && npm publish --access public"
   },
@@ -30,6 +33,7 @@
     "@types/uuid": "^3.4.6",
     "@types/webpack": "^4.41.0",
     "@types/webpack-dev-server": "^3.9.0",
+    "copy-assets": "^1.0.2",
     "jest": "^24.9.0",
     "mime": "^2.4.4",
     "rimraf": "^3.0.0",
