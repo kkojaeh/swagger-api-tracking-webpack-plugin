@@ -48,9 +48,41 @@
           <md-table-cell md-label="Type">{{ item.type }}</md-table-cell>
           <md-table-cell md-label="Method">{{ item.method }}</md-table-cell>
           <md-table-cell md-label="Location">{{ item.location }}</md-table-cell>
-          <md-table-cell md-label="Message">{{ item.message }}</md-table-cell>
+          <md-table-cell md-label="Message">
+            <ul>
+              <li :key="message" v-for="message in item.messages">{{message}}</li>
+            </ul>
+          </md-table-cell>
+          <md-table-cell md-label="Comparison">
+            <md-button @click="showComparison(item)" class="md-icon-button md-raised md-primary">
+              <md-icon>compare_arrows</md-icon>
+            </md-button>
+          </md-table-cell>
         </md-table-row>
       </md-table>
+      <md-dialog :md-active.sync="comparisonVisible" style="height: 100vh;width: 100vw;">
+        <md-dialog-title>Comparison</md-dialog-title>
+        <md-table style="height: 100px">
+          <md-table-row>
+            <md-table-cell>{{ selectedDiff.type }}</md-table-cell>
+            <md-table-cell>{{ selectedDiff.method }}</md-table-cell>
+            <md-table-cell>{{ selectedDiff.location }}</md-table-cell>
+            <md-table-cell>
+              <ul>
+                <li :key="message" v-for="message in selectedDiff.messages">{{message}}</li>
+              </ul>
+            </md-table-cell>
+          </md-table-row>
+        </md-table>
+
+        <div class="md-layout" style="height:100%;">
+          <iframe :src="fromSrc" class="md-layout-item" frameborder="0" style="pointer-events: all; width:100%"
+                  v-if="!!fromSrc"></iframe>
+          <iframe :src="toSrc" class="md-layout-item" frameborder="0" style="pointer-events: all; width:100%"
+                  v-if="!!toSrc"></iframe>
+        </div>
+
+      </md-dialog>
     </md-app-content>
   </md-app>
 </template>
@@ -67,6 +99,9 @@
       this.fromApiId = this.$route.query['from-api-id']
       this.toApiId = this.$route.query['to-api-id']
       await this.fromQuery()
+      setTimeout(() => {
+        this.fromView = true
+      }, 1000)
     },
     data() {
       return {
@@ -78,7 +113,24 @@
         configs: new ApiConfigCollection([]),
         fromApis: new ApiCollection([]),
         toApis: new ApiCollection([]),
-        diffs: []
+        diffs: [],
+        selectedDiff: {},
+        fromSrc: null,
+        toSrc: null
+      }
+    },
+    computed: {
+      comparisonVisible: {
+        // getter
+        get: function () {
+          return !!this.fromSrc || !!this.toSrc
+        },
+        // setter
+        set: function (newValue) {
+          this.fromSrc = null
+          this.toSrc = null
+          this.selectedDiff = {}
+        }
       }
     },
     watch: {
@@ -105,6 +157,15 @@
       }
     },
     methods: {
+      showComparison(diff) {
+        if (diff.fromRef) {
+          this.fromSrc = `/swagger-ui/?url=/apis/${this.fromApiId}/content${diff.fromRef}`
+        }
+        if (diff.toRef) {
+          this.toSrc = `/swagger-ui/?url=/apis/${this.toApiId}/content${diff.toRef}`
+        }
+        this.selectedDiff = diff
+      },
       format(date) {
         return moment(date).format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS)
       },

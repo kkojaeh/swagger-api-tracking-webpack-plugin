@@ -1,6 +1,6 @@
 {
   "name": "swagger-api-tracking-webpack-plugin",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "it's webpack plugin for tracking swagger api changes",
   "engines": {
     "node": ">=8.6.0"
@@ -25,6 +25,7 @@
   "author": "고재훈 <kkojaeh@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/execa": "^2.0.0",
     "@types/jest": "^24.0.24",
     "@types/lowdb": "^1.0.9",
     "@types/node": "^12.12.21",
@@ -43,6 +44,7 @@
     "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
+    "array.prototype.flatmap": "^1.2.3",
     "execa": "^4.0.0",
     "express": "^4.17.1",
     "inversify": "^5.0.1",
@@ -51,8 +53,6 @@
     "node-fetch": "^2.6.0",
     "open": "^7.0.0",
     "reflect-metadata": "^0.1.13",
-    "shelljs": "^0.8.3",
-    "swagger-diff": "^0.6.0",
     "uuid": "^3.3.3"
   }
 }

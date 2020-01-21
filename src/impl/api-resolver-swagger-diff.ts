@@ -1,4 +1,4 @@
-import {Api, ApiDiff, ApiDiffType} from "../api";
+import {Api, ApiDiff, ApiDiffType, ApiMethod} from "../api";
 import ApiResolver from "../api-resolver";
 // @ts-ignore
 import {inject, injectable} from "inversify"
@@ -51,12 +51,8 @@ export default class ApiResolverSwaggerDiff implements ApiResolver {
     this.validate(from)
     this.validate(to)
     const diff = this.make(from, to)
-    const results = [
-      ...diff.newEndpoints.map(this.toCreate),
-      ...diff.changedEndpoints.map(this.toUpdate),
-      ...diff.missingEndpoints.map(this.toDelete)
-    ]
-    return results;
+    const resolver = new ApiDiffResolver(diff, from, to)
+    return resolver.resolve();
   }
 
   equals(from: any, to: any): boolean {
@@ -64,37 +60,6 @@ export default class ApiResolverSwaggerDiff implements ApiResolver {
     this.validate(to)
     const diff = this.make(from, to)
     return diff.changedEndpoints.length == 0 && diff.missingEndpoints.length == 0 && diff.newEndpoints.length == 0
-  }
-
-  private toCreate(e: any): ApiDiff {
-    return {
-      method: e.method,
-      type: ApiDiffType.CREATE,
-      location: e.pathUrl,
-      message: '',
-    }
-  }
-
-  private toUpdate(e: any): ApiDiff {
-    return {
-      method: e.method,
-      type: ApiDiffType.UPDATE,
-      location: e.pathUrl,
-      message: '',
-    }
-  }
-
-  private toDelete(e: any): ApiDiff {
-    return {
-      method: e.method,
-      type: ApiDiffType.DELETE,
-      location: e.pathUrl,
-      message: '',
-    }
-  }
-
-  private deleteIgnores(o: any): void {
-    this.ignoreProperties.forEach((p: string) => delete o[p])
   }
 
   private validate(o: any): void {
@@ -106,6 +71,121 @@ export default class ApiResolverSwaggerDiff implements ApiResolver {
     }
   }
 
+}
+
+class ApiDiffResolver {
+
+  private readonly output: DiffOutput
+  private readonly from: any
+  private readonly to: any
+
+  constructor(output: DiffOutput, from: any, to: any) {
+    this.output = output
+    this.from = from
+    this.to = to
+  }
+
+  public resolve(): Array<ApiDiff> {
+    const created = this.output.newEndpoints.map(this.toCreate, this)
+    const updated = this.output.changedEndpoints.flatMap(this.toUpdate, this)
+    const deleted = this.output.missingEndpoints.map(this.toDelete, this)
+    const result = [
+      ...created,
+      ...updated,
+      ...deleted
+    ]
+    return result
+  }
+
+  private toRef(e: any): string {
+    const tag = e.tags[0]
+    const operationId = e.operationId
+    return `#/${tag}/${operationId}`
+  }
+
+  private toCreate(e: any): ApiDiff {
+    return {
+      method: e.method,
+      type: ApiDiffType.CREATE,
+      location: e.pathUrl,
+      messages: [],
+      toRef: this.toRef(this.to.paths[e.pathUrl][e.method.toLowerCase()])
+    }
+  }
+
+  private toUpdate(e: any): Array<ApiDiff> {
+    return Object.entries(e.changedOperations)
+      .map(([key, value]): ApiDiff => {
+        const o = value as any;
+        let messages = []
+        if (o.diffParam) {
+          messages.push(...o.addParameters.flatMap(this.withAddParameter, this))
+          messages.push(...o.missingParameters.flatMap(this.withMissingParameter, this))
+          messages.push(...o.changedParameter.flatMap(this.withChangedParameter, this))
+        }
+        if (o.diffProp) {
+          messages.push(...o.addProps.flatMap(this.withAddProperty, this))
+          messages.push(...o.missingProps.flatMap(this.withMissingProperty, this))
+          messages.push(...o.changedProps.flatMap(this.withChangedProperty, this))
+        }
+        return {
+          method: key as ApiMethod,
+          type: ApiDiffType.UPDATE,
+          location: e.pathUrl,
+          messages: messages,
+          fromRef: this.toRef(this.from.paths[e.pathUrl][key.toLowerCase()]),
+          toRef: this.toRef(this.to.paths[e.pathUrl][key.toLowerCase()])
+        }
+      })
+  }
+
+  private withAddProperty(p: any): Array<string> {
+    return [`Add ${p.el} // ${p.property.description || ''}`]
+  }
+
+  private withMissingProperty(p: any): Array<string> {
+    return [`Delete ${p.el} // ${p.property.description || ''}`]
+  }
+
+  private withChangedProperty(p: any): Array<string> {
+    return [`Modify ${p.el} // ${p.property.description || ''}`]
+  }
+
+
+  private withAddParameter(p: any): Array<string> {
+    return [`Add ${p.name} // ${p.description || ''}`]
+  }
+
+  private withMissingParameter(p: any): Array<string> {
+    return [`Delete ${p.name} // ${p.description || ''}`]
+  }
+
+  private withChangedParameter(p: any): Array<string> {
+    const increased = p.increased.flatMap(this.withAddProperty, this)
+    const changes = []
+    const left = p.leftParameter
+    const right = p.rightParameter
+    if (p.changeRequired) {
+      changes.push(`${right.name} change into ${right.required ? 'required' : 'not required'}`)
+    }
+    if (p.changeDescription) {
+      changes.push(`${right.name} notes ${left.description} change into ${right.description}`)
+    }
+    const missing = p.missing.flatMap(this.withMissingProperty, this)
+    const changed = p.changed.flatMap(this.withChangedProperty, this)
+    return [...increased, ...changes, ...missing, ...changed]
+  }
+
+
+  private toDelete(e: any): ApiDiff {
+    return {
+      method: e.method,
+      type: ApiDiffType.DELETE,
+      location: e.pathUrl,
+      messages: [],
+      fromRef: this.toRef(this.from.paths[e.pathUrl][e.method.toLowerCase()])
+    }
+  }
 }
 
 

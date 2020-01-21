@@ -95,7 +95,8 @@ export type ApiDiff = {
   method: ApiMethod
   type: ApiDiffType
   location: string
-  message: string
+  messages: Array<string>
+  ref?: string
 }
 
 export enum ApiMethod {

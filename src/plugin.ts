@@ -1,15 +1,16 @@
 import {ApiConfig, Config} from "./config"
 import webpack from 'webpack'
 import ApiLoader from "./api-loader";
-import ApiRepository from "./api-repository";
+import ApiRepository from "./api-repository"
 import express from 'express'
 import net from 'net'
 import open from 'open'
-import ApiResolver from "./api-resolver";
-import {Api} from "./api";
-import {inject, injectable} from "inversify";
-import TYPES from "./types";
-import ContentRepository from "./content-repository";
+import ApiResolver from "./api-resolver"
+import {Api} from "./api"
+import {inject, injectable} from "inversify"
+import TYPES from "./types"
+import ContentRepository from "./content-repository"
+// @ts-ignore
 
 
 @injectable()
@@ -31,9 +32,12 @@ export default class implements webpack.Plugin {
 
   private readonly server: net.Server
 
+  private readonly port: number
+
   constructor(@inject(TYPES.Config) cfg: Config) {
     this.intervalSeconds = cfg.intervalSeconds!
     this.keepSize = cfg.keepSize!
+    this.port = cfg.port!
     this.apis = cfg.apis
     this.server = this.setupServer()
     const address: any = this.server.address()
@@ -46,9 +50,6 @@ export default class implements webpack.Plugin {
 
   protected setupServer(): net.Server {
     const app = express()
-    const router = express.Router();
-    const path = require('path');
-
     app.use(express.static(__dirname + '/ui'));
 
     app.get('/configs', (req, res) => {
@@ -63,7 +64,11 @@ export default class implements webpack.Plugin {
       const diff = await this.resolver.diff(from, to)
       res.json(diff)
     })
-    return app.listen()
+    app.get('/apis/:id/content', async (req, res) => {
+      const content = this.contentRepository.getContent(req.params.id)
+      res.json(content)
+    })
+    return app.listen(this.port)
   }
 
   protected async notify(latestApi: Api, api: Api): Promise<void> {
