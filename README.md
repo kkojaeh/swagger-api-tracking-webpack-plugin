@@ -35,15 +35,17 @@ module.exports = {
 }
 ```
 ### Options
-| Name           | Type         | Description                       | Default |
-|----------------|--------------|-----------------------------------|---------|
-|apis            |Array<Object> |API List Object with name and url  |         |
-|intervalSeconds |Number        |tracking interval seconds          | 600     |
-|keepSize        |Number        |api keep size                      | 20      |
-|workSpace       |String        |file location for persist          | [homedir]/.swagger-api-tracking-webpack-plugin |
-|port            |Number        |server port                        | 50505   |
+| Name            | Type          | Description                        | Default |
+|-----------------|---------------|------------------------------------|---------|
+| apis            | Array<Object> | API List Object with name and url  |         |
+| intervalSeconds | Number        | tracking interval seconds          | 600     |
+| keepSize        | Number        | api keep size                      | 20      |
+| workSpace       | String        | file location for persist          | [homedir]/.swagger-api-tracking-webpack-plugin |
+| port            | Number        | server port                        | 50505   |
 
 ## Screenshots
+![screenshot1](https://github.com/kkojaeh/swagger-api-tracking-webpack-plugin/raw/master/.github/images/screenshot1.png =250x250)
+![screenshot2](https://github.com/kkojaeh/swagger-api-tracking-webpack-plugin/raw/master/.github/images/screenshot2.png =250x250)
 
 
 
