@@ -1,6 +1,6 @@
 {
   "name": "swagger-api-tracking-webpack-plugin",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "homepage": "https://github.com/kkojaeh/swagger-api-tracking-webpack-plugin",
   "repository": "git@github.com:kkojaeh/swagger-api-tracking-webpack-plugin.git",
   "description": "it's webpack plugin for tracking swagger api changes",
@@ -27,7 +27,6 @@
     "compare"
   ],
   "author": "고재훈 <kkojaeh@gmail.com>",
-  "license": "MIT",
   "devDependencies": {
     "@types/execa": "^2.0.0",
     "@types/jest": "^24.0.24",
