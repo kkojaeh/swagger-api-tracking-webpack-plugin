@@ -44,8 +44,8 @@ module.exports = {
 | port            | Number        | server port                        | 50505   |
 
 ## Screenshots
-![screenshot1](https://github.com/kkojaeh/swagger-api-tracking-webpack-plugin/raw/master/.github/images/screenshot1.png =250x250)
-![screenshot2](https://github.com/kkojaeh/swagger-api-tracking-webpack-plugin/raw/master/.github/images/screenshot2.png =250x250)
+![screenshot1](https://github.com/kkojaeh/swagger-api-tracking-webpack-plugin/raw/master/.github/images/screenshot1.png)
+![screenshot2](https://github.com/kkojaeh/swagger-api-tracking-webpack-plugin/raw/master/.github/images/screenshot2.png)
 
 
 
